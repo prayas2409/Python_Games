@@ -13,8 +13,6 @@ def draw_grids(max_width,num_of_rows,window):
         y = y + gap_between_boxes
         pygame.draw.line(window,white_color,(x,0), (x,max_width)) # drawing lines from x axis till max width
         pygame.draw.line(window,white_color,(0,y), (max_width,y))
-        
-
 
 def redraw_window(window):
     window.fill(black_color) # 0 0 0 is for black 
