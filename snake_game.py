@@ -7,17 +7,24 @@ white_color = (255,255,255) # 255 255 255 is for white
 red_color = (255,0,0)
 
 class Cube:
-    def draw(window):
-        pass
+
+    def __init__(self,start,color):
+        self.pos = start
+        self.color = color
+
+    def draw(self,window):
+        distance = window_height // rows
+        row = self.pos[0]
+        col = self.pos[1]
+        pygame.draw.rect(window, self.color, (row*distance+1,col*distance+1, distance-2, distance-2))
 
 class Snake:
 
     def __init__(self, color, pos):
-        self.color = color
-        self.head = Cube(pos)
+        self.head = Cube(pos,color)
 
     def draw(self, window):
-        self.head.draw(window)
+        self.head.draw(window) # Drawing head of snake in window
 
 def draw_grids(max_width,num_of_rows,window):
     size_of_box = max_width // rows # // to get int
@@ -30,8 +37,11 @@ def draw_grids(max_width,num_of_rows,window):
         pygame.draw.line(window,white_color,(x,0), (x,max_width)) 
         pygame.draw.line(window,white_color,(0,y), (max_width,y))
 
+snake = Snake(red_color,(10,10))
+
 def redraw_window(window):
-    window.fill(black_color)  
+    window.fill(black_color)
+    snake.draw(window)  
     draw_grids(window_height,rows,window)
     pygame.display.update()
 
@@ -42,5 +52,7 @@ def main():
         pygame.time.delay(50) # 50 ms delay so that app does not run too fast
         clock.tick(10) # 10 fps, snake moves 10 blocks per sec
         redraw_window(window)
+        
+
 
 main()
