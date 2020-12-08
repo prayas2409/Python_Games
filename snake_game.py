@@ -4,13 +4,27 @@ window_height = 500 # as we'll have square so height = width hence 1 param is fi
 rows = 20
 black_color = (0,0,0) # 0 0 0 is for black
 white_color = (255,255,255) # 255 255 255 is for white
+red_color = (255,0,0)
+
+class Cube:
+    def draw(window):
+        pass
+
+class Snake:
+
+    def __init__(self, color, pos):
+        self.color = color
+        self.head = Cube(pos)
+
+    def draw(self, window):
+        self.head.draw(window)
 
 def draw_grids(max_width,num_of_rows,window):
     size_of_box = max_width // rows # // to get int
     x = y = 0 # initialize x and y to 0
     for _ in range(rows):
         # increasing the x & y axis co-ordinates by size of each cube
-        x = x + size_of_box 
+        x = x + size_of_box
         y = y + size_of_box
         # drawing lines from x & y axis till max width to create grid /boxes
         pygame.draw.line(window,white_color,(x,0), (x,max_width)) 
