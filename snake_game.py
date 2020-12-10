@@ -12,11 +12,22 @@ class Cube:
         self.pos = start
         self.color = color
 
-    def draw(self,window):
+    def draw(self,window, eyes=False):
+        # eyes as true/false only for head it'll be sent true and for rest body it's false
         distance = window_height // rows
         row = self.pos[0]
         col = self.pos[1]
         pygame.draw.rect(window, self.color, (row*distance+1,col*distance+1, distance-2, distance-2))
+
+        if eyes:
+            #only if eyes provided i.e for head, draw eyes else plain red block
+            centre = distance // 2
+            radius = 3
+            eye_one = (row*distance+centre-radius,col*distance+8)
+            eye_two = (row*distance + distance -radius*2, col*distance+8)
+            pygame.draw.circle(window, (0,0,0), eye_one, radius)
+            pygame.draw.circle(window, (0,0,0), eye_two, radius)
+       
 
 class Snake:
 
@@ -24,7 +35,7 @@ class Snake:
         self.head = Cube(pos,color)
 
     def draw(self, window):
-        self.head.draw(window) # Drawing head of snake in window
+        self.head.draw(window,eyes=True) # Drawing head of snake in window
 
 def draw_grids(max_width,num_of_rows,window):
     size_of_box = max_width // rows # // to get int
