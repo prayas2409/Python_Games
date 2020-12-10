@@ -53,6 +53,4 @@ def main():
         clock.tick(10) # 10 fps, snake moves 10 blocks per sec
         redraw_window(window)
         
-
-
 main()
