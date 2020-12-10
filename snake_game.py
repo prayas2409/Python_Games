@@ -7,19 +7,15 @@ white_color = (255,255,255) # 255 255 255 is for white
 red_color = (255,0,0)
 
 class Cube:
-    """Each block of snake will be cube
-    """    
+
     def __init__(self,start,color):
-        # color and position of each block/cube    
         self.pos = start
         self.color = color
 
     def draw(self,window):
-        # distance is the size of box i.e gap between 2 corners
         distance = window_height // rows
         row = self.pos[0]
         col = self.pos[1]
-        # Draw the head with head's color. 
         pygame.draw.rect(window, self.color, (row*distance+1,col*distance+1, distance-2, distance-2))
 
 class Snake:
@@ -41,13 +37,13 @@ def draw_grids(max_width,num_of_rows,window):
         pygame.draw.line(window,white_color,(x,0), (x,max_width)) 
         pygame.draw.line(window,white_color,(0,y), (max_width,y))
 
-snake = Snake(red_color,(10,10)) # 10,10 is the 
+snake = Snake(red_color,(10,10)) # Send color and start position as x,y for snake head
 
 def redraw_window(window):
     window.fill(black_color)
     snake.draw(window)  
     draw_grids(window_height,rows,window)
-    pygame.display.update(
+    pygame.display.update()
 
 def main():
     window = pygame.display.set_mode(size=(window_height,window_height)) 
