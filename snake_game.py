@@ -23,10 +23,12 @@ class Cube:
             #only if eyes provided i.e for head, draw eyes else plain red block
             centre = distance // 2
             radius = 3
+            # x and y axis for eye1 and eye2 of snake
             eye_one = (row*distance+centre-radius,col*distance+8)
             eye_two = (row*distance + distance -radius*2, col*distance+8)
-            pygame.draw.circle(window, (0,0,0), eye_one, radius)
-            pygame.draw.circle(window, (0,0,0), eye_two, radius)
+            # Drawing actual eyes
+            pygame.draw.circle(window, black_color, eye_one, radius)
+            pygame.draw.circle(window, black_color, eye_two, radius)
        
 
 class Snake:
