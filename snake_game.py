@@ -43,10 +43,12 @@ class Snake:
 
     def __init__(self, color, pos):
         self.head = Cube(pos,color)
-        self.dirnx = 0
-        self.dirny = 1
+        # added default direction where snake could move
+        self.dirnx = 1
+        self.dirny = 0
     
     def move(self):
+        # used the variable to type in short
         cube = self.head
         cube.move(cube.dirnx,cube.dirny)
 
@@ -68,8 +70,8 @@ snake = Snake(red_color,(10,10)) # Send color and start position as x,y for snak
 
 def redraw_window(window):
     window.fill(black_color)
-    snake.draw(window)
     snake.move()
+    snake.draw(window)
     draw_grids(window_height,rows,window)
     pygame.display.update()
 
