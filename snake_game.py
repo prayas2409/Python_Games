@@ -56,39 +56,36 @@ class Snake:
                 pygame.quit()
 
             keys = pygame.key.get_pressed()
-            for key in keys:
+            for _ in keys:
                 # Move left so decrease x 
                 if keys[pygame.K_LEFT]:
                     self.dirnx = -1
                     self.dirny = 0
-                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
                 # Move right so increase s
                 elif keys[pygame.K_RIGHT]:
                     self.dirnx = 1
                     self.dirny = 0
-                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
                 # Move up 
                 elif keys[pygame.K_UP]:
                     self.dirnx = 0
                     self.dirny = -1
-                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
                 # Move down
                 elif keys[pygame.K_DOWN]:
                     self.dirnx = 0
                     self.dirny = 1
-                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+
+                self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
 
         position = cube.pos[:]
         if position in self.turns:
             turn = self.turns[position]
             cube.move(turn[0],turn[1])
-
             # pop turns because: previous turns should move out else cube revolves in same space
             self.turns.pop(position)
 
         #handling corner conditions
         else:
-            if cube.dirnx == -1 and cub# Move righte.pos[0] <= 0: cube.pos = (rows-1, cube.pos[1]) # left corner
+            if cube.dirnx == -1 and cube.pos[0] <= 0: cube.pos = (rows-1, cube.pos[1]) # left corner
             elif cube.dirnx == 1 and cube.pos[0] >= rows-1: cube.pos = (0,cube.pos[1]) # right corner
             elif cube.dirny == 1 and cube.pos[1] >= rows-1: cube.pos = (cube.pos[0], 0) # top 
             elif cube.dirny == -1 and cube.pos[1] <= 0: cube.pos = (cube.pos[0],rows-1) # bottom
