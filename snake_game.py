@@ -41,6 +41,7 @@ class Cube:
 
 class Snake:
 
+    turns= {}
     def __init__(self, color, pos):
         self.head = Cube(pos,color)
         # added default direction where snake could move
@@ -50,13 +51,48 @@ class Snake:
     def move(self):
         # used the variable to type in short
         cube = self.head
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+
+            keys = pygame.key.get_pressed()
+            for key in keys:
+                if keys[pygame.K_LEFT]:
+                    self.dirnx = -1
+                    self.dirny = 0
+                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+ 
+                elif keys[pygame.K_RIGHT]:
+                    self.dirnx = 1
+                    self.dirny = 0
+                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+ 
+                elif keys[pygame.K_UP]:
+                    self.dirnx = 0
+                    self.dirny = -1
+                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+ 
+                elif keys[pygame.K_DOWN]:
+                    self.dirnx = 0
+                    self.dirny = 1
+                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+
+        position = cube.pos[:]
+        if position in self.turns:
+            turn = self.turns[position]
+            print(self.turns)
+            cube.move(turn[0],turn[1])
+
+            # above line is because: previous turns should move out else cube revolves in same space
+            self.turns.pop(position)
 
         #handling corner conditions
-        if cube.dirnx == -1 and cube.pos[0] <= 0: cube.pos = (rows-1, cube.pos[1]) # left corner
-        elif cube.dirnx == 1 and cube.pos[0] >= rows-1: cube.pos = (0,cube.pos[1]) # right corner
-        elif cube.dirny == 1 and cube.pos[1] >= rows-1: cube.pos = (cube.pos[0], 0) # top 
-        elif cube.dirny == -1 and cube.pos[1] <= 0: cube.pos = (cube.pos[0],rows-1) # bottom
-        else: cube.move(cube.dirnx,cube.dirny) # just move normally
+        else:
+            if cube.dirnx == -1 and cube.pos[0] <= 0: cube.pos = (rows-1, cube.pos[1]) # left corner
+            elif cube.dirnx == 1 and cube.pos[0] >= rows-1: cube.pos = (0,cube.pos[1]) # right corner
+            elif cube.dirny == 1 and cube.pos[1] >= rows-1: cube.pos = (cube.pos[0], 0) # top 
+            elif cube.dirny == -1 and cube.pos[1] <= 0: cube.pos = (cube.pos[0],rows-1) # bottom
+            else: cube.move(cube.dirnx,cube.dirny) # just move normally
 
     def draw(self, window):
         self.head.draw(window,eyes=True) # Drawing head of snake in window
