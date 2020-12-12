@@ -109,7 +109,6 @@ snake = Snake(red_color,(10,10)) # Send color and start position as x,y for snak
 
 def redraw_window(window):
     window.fill(black_color)
-    snake.move() # update the snake cordinates
     snake.draw(window)
     draw_grids(window_height,rows,window)
     pygame.display.update()
@@ -120,6 +119,7 @@ def main():
     while(True):
         pygame.time.delay(50) # 50 ms delay so that app does not run too fast
         clock.tick(10) # 10 fps, snake moves 10 blocks per sec
+        snake.move() # update the snake cordinates
         redraw_window(window)
         
 main()
