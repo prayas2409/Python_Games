@@ -11,7 +11,7 @@ blue_color = (0,0,255)
 class Cube:
 
     def __init__(self,start,color,dirnx=0,dirny=1):
-        # Added default direction for cube it'll move in right direction by default as x=1, y=0
+        # Added default direction for Cube it'll move in right direction by default as x=1, y=0
         self.pos = start
         self.color = color
         self.dirnx = dirnx
@@ -74,14 +74,17 @@ class Snake:
 
                 self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
 
+        len_of_snake = len(self.body) 
         # used the variable to type in short
         for index,cube in enumerate(self.body):
             position = cube.pos[:]
             if position in self.turns:
                 turn = self.turns[position]
                 cube.move(turn[0],turn[1])
-                # pop turns because: previous turns should move out else cube revolves in same space
-                self.turns.pop(position)
+                ''' if last index then pop turns because:
+                    previous turns should move out else Cube revolves in same space '''
+                if index == len_of_snake - 1:               
+                    self.turns.pop(position)
         #handling corner conditions
             else:
                 if cube.dirnx == -1 and cube.pos[0] <= 0: cube.pos = (rows-1, cube.pos[1]) # left corner
@@ -90,14 +93,37 @@ class Snake:
                 elif cube.dirny == -1 and cube.pos[1] <= 0: cube.pos = (cube.pos[0],rows-1) # bottom
                 else: cube.move(cube.dirnx,cube.dirny) # just move normally
 
+    def add_cube(self):
+        # get previous block as per it's position we'll add the new block
+        tail = self.body[-1]
+        # get the direction in which the previous block is moving.
+        dx, dy = tail.dirnx, tail.dirny
+ 
+        if dx == 1 and dy == 0: # if moving in right
+            self.body.append(Cube((tail.pos[0]-1,tail.pos[1]),red_color))
+        elif dx == -1 and dy == 0: # moving left
+            self.body.append(Cube((tail.pos[0]+1,tail.pos[1]),red_color))
+        elif dx == 0 and dy == 1: 
+            self.body.append(Cube((tail.pos[0],tail.pos[1]-1),red_color))
+        elif dx == 0 and dy == -1:
+            self.body.append(Cube((tail.pos[0],tail.pos[1]+1),red_color))
+        # Assign the direction to newly added Cube
+        self.body[-1].dirnx = dx    
+        self.body[-1].dirny = dy    
+
     def draw(self, window):
         self.head.draw(window,eyes=True) # Drawing head of snake in window
+        len_of_snake = len(self.body)
+        # iterate for rest of body as head is at 0th position hence taken 1 for next
+        for num_of_snake in range(1,len_of_snake):
+            self.body[num_of_snake].draw(window)
+            
 
 def draw_grids(max_width,num_of_rows,window):
     size_of_box = max_width // rows # // to get int
     x = y = 0 # initialize x and y to 0
     for _ in range(rows):
-        # increasing the x & y axis co-ordinates by size of each cube
+        # increasing the x & y axis co-ordinates by size of each Cube
         x = x + size_of_box
         y = y + size_of_box
         # drawing lines from x & y axis till max width to create grid /boxes
@@ -138,6 +164,7 @@ def main():
         snake.move() # update the snake cordinates
         if snake.body[0].pos == snack.pos:
             # Create a new snack only when current one is taken by snake
+            snake.add_cube()
             snack = Cube(randomSnack(rows, snake), color=blue_color)
         redraw_window(window)
 
