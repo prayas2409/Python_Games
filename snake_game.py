@@ -1,10 +1,12 @@
 import pygame
+import random
 
 window_height = 500 # as we'll have square so height = width hence 1 param is fine
 rows = 20
 black_color = (0,0,0) # 0 0 0 is for black
 white_color = (255,255,255) # 255 255 255 is for white
 red_color = (255,0,0)
+blue_color = (0,0,255)
 
 class Cube:
 
@@ -79,15 +81,14 @@ class Snake:
                 turn = self.turns[position]
                 cube.move(turn[0],turn[1])
                 # pop turns because: previous turns should move out else cube revolves in same space
-                # if index == len(self.body)-1:
-                #     self.turns.pop(p)
+                self.turns.pop(position)
         #handling corner conditions
-        else:
-            if cube.dirnx == -1 and cube.pos[0] <= 0: cube.pos = (rows-1, cube.pos[1]) # left corner
-            elif cube.dirnx == 1 and cube.pos[0] >= rows-1: cube.pos = (0,cube.pos[1]) # right corner
-            elif cube.dirny == 1 and cube.pos[1] >= rows-1: cube.pos = (cube.pos[0], 0) # top 
-            elif cube.dirny == -1 and cube.pos[1] <= 0: cube.pos = (cube.pos[0],rows-1) # bottom
-            else: cube.move(cube.dirnx,cube.dirny) # just move normally
+            else:
+                if cube.dirnx == -1 and cube.pos[0] <= 0: cube.pos = (rows-1, cube.pos[1]) # left corner
+                elif cube.dirnx == 1 and cube.pos[0] >= rows-1: cube.pos = (0,cube.pos[1]) # right corner
+                elif cube.dirny == 1 and cube.pos[1] >= rows-1: cube.pos = (cube.pos[0], 0) # top 
+                elif cube.dirny == -1 and cube.pos[1] <= 0: cube.pos = (cube.pos[0],rows-1) # bottom
+                else: cube.move(cube.dirnx,cube.dirny) # just move normally
 
     def draw(self, window):
         self.head.draw(window,eyes=True) # Drawing head of snake in window
@@ -103,21 +104,41 @@ def draw_grids(max_width,num_of_rows,window):
         pygame.draw.line(window,white_color,(x,0), (x,max_width)) 
         pygame.draw.line(window,white_color,(0,y), (max_width,y))
 
-snake = Snake(red_color,(10,10)) # Send color and start position as x,y for snake head
+def randomSnack(rows, snake):
+    positions = snake.body # get the body of snake
+    while True:
+        # generate randomly snack coordinates
+        x = random.randrange(rows)
+        y = random.randrange(rows)
+        if len(list(filter(lambda z:z.pos == (x,y), positions))) > 0: 
+            # Checked if randomly generated block is in snakes body so we need to regenerate
+            continue
+        else:
+            return (x,y)
 
 def redraw_window(window):
+    # made snake and snack global so as need not pass them a args
+    global snake,snack
     window.fill(black_color)
     snake.draw(window)
+    snack.draw(window)
     draw_grids(window_height,rows,window)
     pygame.display.update()
 
 def main():
+    global snake, snack
     window = pygame.display.set_mode(size=(window_height,window_height)) 
     clock = pygame.time.Clock()
+    snake = Snake(red_color,(10,10)) # Send color and default start position 10,10 as x,y for snake head
+    snack = Cube(randomSnack(rows, snake), color=blue_color)
+
     while(True):
         pygame.time.delay(50) # 50 ms delay so that app does not run too fast
         clock.tick(10) # 10 fps, snake moves 10 blocks per sec
         snake.move() # update the snake cordinates
+        if snake.body[0].pos == snack.pos:
+            # Create a new snack only when current one is taken by snake
+            snack = Cube(randomSnack(rows, snake), color=blue_color)
         redraw_window(window)
-        
+
 main()
