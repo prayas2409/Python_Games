@@ -1,5 +1,6 @@
 import pygame
 import random
+import tkinter as tk
 
 window_height = 500 # as we'll have square so height = width hence 1 param is fine
 rows = 20
@@ -166,6 +167,13 @@ def main():
             # Create a new snack only when current one is taken by snake
             snake.add_cube()
             snack = Cube(randomSnack(rows, snake), color=blue_color)
+        
+        for x in range(len(snake.body)):
+            if snake.body[x].pos in list(map(lambda z:z.pos,snake.body[x+1:])):
+                print('Score: ', len(snake.body))
+                print('Please restart the game')
+                exit()
+        
         redraw_window(window)
 
 main()
