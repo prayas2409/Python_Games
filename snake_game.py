@@ -1,6 +1,7 @@
 import pygame
 import random
 import tkinter as tk
+from tkinter import messagebox
 
 window_height = 500 # as we'll have square so height = width hence 1 param is fine
 rows = 20
@@ -118,7 +119,15 @@ class Snake:
         # iterate for rest of body as head is at 0th position hence taken 1 for next
         for num_of_snake in range(1,len_of_snake):
             self.body[num_of_snake].draw(window)
-            
+
+    def reset(self, pos):
+        # reset the game
+        self.head = Cube(pos,red_color)
+        self.body = []
+        self.body.append(self.head)
+        self.turns = {}
+        self.dirnx = 0
+        self.dirny = 1        
 
 def draw_grids(max_width,num_of_rows,window):
     size_of_box = max_width // rows # // to get int
@@ -130,6 +139,18 @@ def draw_grids(max_width,num_of_rows,window):
         # drawing lines from x & y axis till max width to create grid /boxes
         pygame.draw.line(window,white_color,(x,0), (x,max_width)) 
         pygame.draw.line(window,white_color,(0,y), (max_width,y))
+
+ 
+def message_box(subject, content):
+    root = tk.Tk() # creating tinker object to create pop up
+    root.attributes("-topmost", True) 
+    root.withdraw()
+    messagebox.showinfo(subject, content) # added content to alertbox
+    try:
+        root.destroy() # destroy the popup
+    except:
+        pass
+ 
 
 def randomSnack(rows, snake):
     positions = snake.body # get the body of snake
@@ -171,9 +192,9 @@ def main():
         for x in range(len(snake.body)):
             if snake.body[x].pos in list(map(lambda z:z.pos,snake.body[x+1:])):
                 print('Score: ', len(snake.body))
-                print('Please restart the game')
-                exit()
-        
+                message_box('You Lost!', 'Play again...')
+                snake.reset((10,10))
+                break
         redraw_window(window)
 
 main()
