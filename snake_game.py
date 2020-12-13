@@ -41,16 +41,16 @@ class Cube:
 
 class Snake:
 
+    body = []
     turns= {}
     def __init__(self, color, pos):
         self.head = Cube(pos,color)
         # added default direction where snake could move
+        self.body.append(self.head)
         self.dirnx = 1
         self.dirny = 0
     
     def move(self):
-        # used the variable to type in short
-        cube = self.head
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -59,30 +59,28 @@ class Snake:
             for _ in keys:
                 # Move left so decrease x 
                 if keys[pygame.K_LEFT]:
-                    self.dirnx = -1
-                    self.dirny = 0
+                    self.dirnx, self.dirny = -1,0
                 # Move right so increase s
                 elif keys[pygame.K_RIGHT]:
-                    self.dirnx = 1
-                    self.dirny = 0
+                    self.dirnx, self.dirny = 1,0
                 # Move up 
                 elif keys[pygame.K_UP]:
-                    self.dirnx = 0
-                    self.dirny = -1
+                    self.dirnx, self.dirny = 0,-1
                 # Move down
                 elif keys[pygame.K_DOWN]:
-                    self.dirnx = 0
-                    self.dirny = 1
+                    self.dirnx, self.dirny = 0,1
 
                 self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
 
-        position = cube.pos[:]
-        if position in self.turns:
-            turn = self.turns[position]
-            cube.move(turn[0],turn[1])
-            # pop turns because: previous turns should move out else cube revolves in same space
-            self.turns.pop(position)
-
+        # used the variable to type in short
+        for index,cube in enumerate(self.body):
+            position = cube.pos[:]
+            if position in self.turns:
+                turn = self.turns[position]
+                cube.move(turn[0],turn[1])
+                # pop turns because: previous turns should move out else cube revolves in same space
+                # if index == len(self.body)-1:
+                #     self.turns.pop(p)
         #handling corner conditions
         else:
             if cube.dirnx == -1 and cube.pos[0] <= 0: cube.pos = (rows-1, cube.pos[1]) # left corner
