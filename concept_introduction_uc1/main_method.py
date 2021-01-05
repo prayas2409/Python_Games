@@ -1,2 +1,2 @@
 if __name__ == "__main__":
-    print("Hello!! I am main method")
+    print("Hiii! I am main method")
