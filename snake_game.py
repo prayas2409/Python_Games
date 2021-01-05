@@ -121,7 +121,7 @@ class Snake:
             self.body[num_of_snake].draw(window)
 
     def reset(self, pos):
-        # reset the game
+        # reset the game    
         self.head = Cube(pos,red_color)
         self.body = []
         self.body.append(self.head)
