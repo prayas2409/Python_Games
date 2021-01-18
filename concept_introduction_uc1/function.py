@@ -11,3 +11,4 @@ if __name__ == "__main__":
     company_name = "Brigelabz"
     # pass company name to name printer
     name_printer(company_name)
+    name_printer("Tata Industries")
