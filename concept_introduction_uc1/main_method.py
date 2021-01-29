@@ -6,8 +6,8 @@ def main():
 print("calling main from outside")
 main()
 
-    # good practice
+# good practice
 if __name__ == "__main__": 
     # checks if running current file only then executes below code
     print("calling main method from inside")
-    main() 
+    main()
