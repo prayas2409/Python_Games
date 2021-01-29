@@ -13,7 +13,6 @@ def main():
         pygame.time.delay(50) # 50 ms delay so that app does not run too fast
         clock.tick(10) # 10 fps, snake moves 10 blocks per sec
         redraw_window(window)
-        pass
 
 
 main()
